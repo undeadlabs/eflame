@@ -494,8 +494,11 @@ foreach (<>) {
 	}
 }
 
+# reverse the data so it's in call order
+@Data = reverse @Data
+
 # process and merge frames
-foreach (sort @Data) {
+foreach (@Data) {
 	chomp;
 	# process: folded_stack count
 	# eg: func_a;func_b;func_c 31
