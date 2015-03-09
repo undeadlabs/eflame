@@ -379,6 +379,13 @@ sub color {
 		return "rgb($r,$g,0)";
 	}
 
+	if (defined $type and $type eq "blocked") {
+		my $r = 88;
+		my $g = 155;
+		my $b = 211;
+		return "rgb($r,$g,$b)";
+	}
+
 	return "rgb(0,0,0)";
 }
 
@@ -495,7 +502,7 @@ foreach (<>) {
 }
 
 # reverse the data so it's in call order
-@Data = reverse @Data
+@Data = reverse @Data;
 
 # process and merge frames
 foreach (@Data) {
@@ -771,6 +778,8 @@ while (my ($id, $node) = each %Node) {
 	my $stime = $node->{stime};
 	my $delta = $node->{delta};
 
+	$func =~ s/\s+$//;
+
 	$etime = $timemax if $func eq "" and $depth == 0;
 
 	my $x1 = $xpad + $stime * $widthpertime;
@@ -817,6 +826,8 @@ while (my ($id, $node) = each %Node) {
 	my $color;
 	if ($func eq "-") {
 		$color = $vdgrey;
+	} elsif ($func eq "sleep") {
+		$color = color("blocked", $hash, $func);
 	} elsif (defined $delta) {
 		$color = color_scale($delta, $maxdelta);
 	} elsif ($palette) {
